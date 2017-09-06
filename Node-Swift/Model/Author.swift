@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-class Author: BaseMappable {
+class Author: Mappable {
 
     var loginname: String?
     var avatar_url: String?

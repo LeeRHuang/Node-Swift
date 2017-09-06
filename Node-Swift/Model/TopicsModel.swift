@@ -10,8 +10,9 @@ import UIKit
 import ObjectMapper
 import Alamofire
 import AlamofireObjectMapper
+import SwiftyJSON
 
-class TopicsModel: BaseMappable {
+class TopicsModel: Mappable {
     
     var success: Bool?
     var data : [Topic]?
@@ -25,11 +26,12 @@ class TopicsModel: BaseMappable {
     }
     
     class func loadTopicsData(done:@escaping (_ t : TopicsModel)->Void) {
-        let URL = "https://cnodejs.org/api/v1/topics?tab=\(1)&page=\(1)"
+        let URL = "https://cnodejs.org/api/v1/topics?tab=share&mdrender=false"
+        /* 基础的请求 及JSON数据解析 */
         Alamofire.request(URL).responseObject { (response: DataResponse<TopicsModel>) in
             let topics = response.result.value
             done(topics!)
-            print("topics is \(topics)")
         }
+
     }
 }

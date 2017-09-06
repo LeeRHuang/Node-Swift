@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-class Topic: BaseMappable {
+class Topic: Mappable {
 
     var id: String?
     var author_id : String?
