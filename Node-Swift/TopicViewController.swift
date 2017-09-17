@@ -7,34 +7,58 @@
 //
 
 import UIKit
+import ESPullToRefresh
 
 class TopicViewController: UITableViewController {
 
     fileprivate let CellIdentifier = "CellIdentifier"
     fileprivate var dataArray : [Topic] = []
+    fileprivate var page: Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureData()
         configureUI()
+        configureRefreshUI()
+        loadData()
         // Do any additional setup after loading the view.
     }
     
-    func configureUI() {
+    private func configureUI() {
         self.navigationItem.title = "NodeJs"
         tableView.register(TopicTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
     }
     
-    func configureData() {
-        TopicsModel.loadTopicsData {TopicsModel in
-//            guard !(((TopicsModel.data?.count) != nil)) else {
-//                return
-//            }
+    private func configureRefreshUI() {
+        self.tableView.es_addPullToRefresh {
+            [unowned self] in
+            
+            self.refreshData()
+            self.tableView.es_stopPullToRefresh(ignoreDate: true)
+            /// Set ignore footer or not
+            self.tableView.es_stopPullToRefresh(ignoreDate: true, ignoreFooter: false)
+        }
+        
+        self.tableView.es_addInfiniteScrolling {
+            [unowned self] in
+            
+            self.loadMoreData()
+            self.tableView.es_stopLoadingMore()
+            /// If no more data
+//            self.tableView.es_noticeNoMoreData()
+        }
+    }
+    
+    private func loadData() {
+        TopicsModel.loadTopicsData(page: "\(page)", done: { TopicsModel in
+
+            guard (TopicsModel.data?.count)! > 0 else {
+                return
+            }
             for item in TopicsModel.data! {
                 self.dataArray.append(item)
             }
             self.tableView.reloadData()
-        }
+        })
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -47,6 +71,16 @@ class TopicViewController: UITableViewController {
         let title = topic.title
         cell.textLabel?.text = title
         return cell
+    }
+    
+    private func refreshData() {
+        dataArray.removeAll()
+        loadData()
+    }
+    
+    private func loadMoreData() {
+        page += 1
+        loadData()
     }
 
     override func didReceiveMemoryWarning() {

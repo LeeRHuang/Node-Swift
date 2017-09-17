@@ -25,8 +25,8 @@ class TopicsModel: Mappable {
         data <- map["data"]
     }
     
-    class func loadTopicsData(done:@escaping (_ t : TopicsModel)->Void) {
-        let URL = "https://cnodejs.org/api/v1/topics?tab=share&mdrender=false"
+    class func loadTopicsData(page: String,done:@escaping (_ t : TopicsModel)->Void) {
+        let URL = "https://cnodejs.org/api/v1/topics?tab=share&mdrender=false&page=\(page)"
         /* 基础的请求 及JSON数据解析 */
         Alamofire.request(URL).responseObject { (response: DataResponse<TopicsModel>) in
             let topics = response.result.value
