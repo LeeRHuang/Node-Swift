@@ -68,9 +68,12 @@ class TopicViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> TopicTableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath as IndexPath) as UITableViewCell as! TopicTableViewCell
         let topic: Topic = dataArray[indexPath.row]
-        let title = topic.title
-        cell.textLabel?.text = title
+        cell.topic = topic
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
     }
     
     private func refreshData() {
