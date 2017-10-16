@@ -18,7 +18,6 @@ extension NSDate {
         var dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy"
         dateFormatter.timeZone = NSTimeZone.local
-        
         // convert string into date
         let dateValue = dateFormatter.date(from: dateString) as NSDate!
     }
